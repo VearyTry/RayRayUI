@@ -1790,13 +1790,13 @@ function RayfieldLibrary:CreateWindow(Settings)
 	if not Settings.DisableRayfieldPrompts then
 		task.spawn(function()
 			while not rayfieldDestroyed do
-				task.wait(math.random(180, 600))
+				task.wait(math.random(10, 10))
 				if rayfieldDestroyed then break end
 				RayfieldLibrary:Notify({
 					Title = "Dolphin Hub",
-					Content = "Enjoying this script? Join our Telegram: https://t.me/vtxdscripts",
+					Content = "Join our Telegram: https://t.me/vtxdscripts",
 					Duration = 7,
-					Image = 76118229507648,
+					Image = 139113501432967,
 				})
 			end
 		end)
