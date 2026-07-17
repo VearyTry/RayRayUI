@@ -3580,83 +3580,83 @@ function RayfieldLibrary:CreateWindow(Settings)
 		end)
 
 -- Custom Image Element
-		function Tab:CreateImage(ImageSettings)
-			local ImageValue = {}
-			
-			-- Клонируем контейнер Label, чтобы сохранить структуру и стили элементов Rayfield
-			local ImageElement = Elements.Template.Label:Clone()
-			ImageElement.Name = ImageSettings.Name or "ImageContainer"
-			ImageElement.Visible = true
-			ImageElement.Parent = TabPage
+function Tab:CreateImage(ImageSettings)
+    local ImageValue = {}
+    
+    -- Клонируем контейнер Label, чтобы сохранить структуру и стили элементов Rayfield
+    local ImageElement = Elements.Template.Label:Clone()
+    ImageElement.Name = ImageSettings.Name or "ImageContainer"
+    ImageElement.Visible = true
+    ImageElement.Parent = TabPage
 
-			-- Полностью удаляем стандартные элементы, чтобы библиотека не включала их обратно
-			if ImageElement:FindFirstChild("Title") then
-			    ImageElement.Title:Destroy()
-			end
-			if ImageElement:FindFirstChild("Icon") then
-			    ImageElement.Icon:Destroy()
-			end
+    -- Очищаем текст и изображение вместо удаления, чтобы не ломать внутренние анимации библиотеки
+    if ImageElement:FindFirstChild("Title") then
+        ImageElement.Title.Text = ""
+    end
+    if ImageElement:FindFirstChild("Icon") then
+        ImageElement.Icon.Image = ""
+    end
 
-			-- Настраиваем высоту контейнера под картинку
-			local height = ImageSettings.Height or 150
-			ImageElement.Size = UDim2.new(1, -10, 0, height + 10)
+    -- Настраиваем высоту контейнера под картинку
+    local height = ImageSettings.Height or 150
+    ImageElement.Size = UDim2.new(1, -10, 0, height + 10)
 
-			-- Создаем сам ImageLabel внутри контейнера
-			local ImageLabel = Instance.new("ImageLabel")
-			ImageLabel.Name = "CustomImage"
-			ImageLabel.BackgroundTransparency = 1
-			ImageLabel.Size = ImageSettings.ImageSize or UDim2.new(1, -20, 1, -10)
-			ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-			ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-			
-			-- Используем стандартный парсер Rayfield (поддерживает rbxassetid, getcustomasset и Lucide-иконки)
-			local img, rectOffset, rectSize = resolveIcon(ImageSettings.Image)
-			ImageLabel.Image = img
-			if rectOffset then ImageLabel.ImageRectOffset = rectOffset end
-			if rectSize then ImageLabel.ImageRectSize = rectSize end
+    -- Создаем сам ImageLabel внутри контейнера
+    local ImageLabel = Instance.new("ImageLabel")
+    ImageLabel.Name = "CustomImage"
+    ImageLabel.BackgroundTransparency = 1
+    ImageLabel.Size = ImageSettings.ImageSize or UDim2.new(1, -20, 1, -10)
+    ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+    ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+    
+    -- Используем стандартный парсер Rayfield
+    local img, rectOffset, rectSize = resolveIcon(ImageSettings.Image)
+    ImageLabel.Image = img
+    if rectOffset then ImageLabel.ImageRectOffset = rectOffset end
+    if rectSize then ImageLabel.ImageRectSize = rectSize end
 
-			ImageLabel.ScaleType = ImageSettings.ScaleType or Enum.ScaleType.Fit
-			ImageLabel.Parent = ImageElement
+    ImageLabel.ScaleType = ImageSettings.ScaleType or Enum.ScaleType.Fit
+    ImageLabel.Parent = ImageElement
 
-			-- Применяем цвета текущей темы оформления
-			ImageElement.BackgroundColor3 = SelectedTheme.SecondaryElementBackground
-			ImageElement.UIStroke.Color = SelectedTheme.SecondaryElementStroke
+    -- Применяем цвета текущей темы оформления
+    ImageElement.BackgroundColor3 = SelectedTheme.SecondaryElementBackground
+    ImageElement.UIStroke.Color = SelectedTheme.SecondaryElementStroke
 
-			-- Устанавливаем прозрачность для плавной анимации появления
-			ImageElement.BackgroundTransparency = 1
-			ImageElement.UIStroke.Transparency = 1
-			ImageLabel.ImageTransparency = 1
+    -- Устанавливаем прозрачность для плавной анимации появления
+    ImageElement.BackgroundTransparency = 1
+    ImageElement.UIStroke.Transparency = 1
+    ImageLabel.ImageTransparency = 1
 
-			-- Анимация плавного появления
-			TweenService:Create(ImageElement, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
-			TweenService:Create(ImageElement.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
-			TweenService:Create(ImageLabel, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {ImageTransparency = 0}):Play()
+    -- Анимация плавного появления
+    TweenService:Create(ImageElement, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
+    TweenService:Create(ImageElement.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
+    TweenService:Create(ImageLabel, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {ImageTransparency = 0}):Play()
 
-			-- Метод для динамического изменения картинки во время работы скрипта
-			function ImageValue:SetImage(NewImage)
-				local newImg, newRectOffset, newRectSize = resolveIcon(NewImage)
-				ImageLabel.Image = newImg
-				if newRectOffset then ImageLabel.ImageRectOffset = newRectOffset end
-				if newRectSize then ImageLabel.ImageRectSize = newRectSize end
-			end
+    -- Метод для динамического изменения картинки
+    function ImageValue:SetImage(NewImage)
+        local newImg, newRectOffset, newRectSize = resolveIcon(NewImage)
+        ImageLabel.Image = newImg
+        if newRectOffset then ImageLabel.ImageRectOffset = newRectOffset end
+        if newRectSize then ImageLabel.ImageRectSize = newRectSize end
+    end
 
-			-- Метод для изменения высоты картинки
-			function ImageValue:SetHeight(NewHeight)
-				TweenService:Create(ImageElement, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {Size = UDim2.new(1, -10, 0, NewHeight + 10)}):Play()
-			end
+    -- Метод для изменения высоты картинки
+    function ImageValue:SetHeight(NewHeight)
+        TweenService:Create(ImageElement, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {Size = UDim2.new(1, -10, 0, NewHeight + 10)}):Play()
+    end
 
-			-- Синхронизация с темами Rayfield при их изменении
-			local themeConn = Rayfield.Main:GetPropertyChangedSignal('BackgroundColor3'):Connect(function()
-				ImageElement.BackgroundColor3 = SelectedTheme.SecondaryElementBackground
-				ImageElement.UIStroke.Color = SelectedTheme.SecondaryElementStroke
-			end)
+    -- Синхронизация с темами Rayfield
+    local themeConn = Rayfield.Main:GetPropertyChangedSignal('BackgroundColor3'):Connect(function()
+        ImageElement.BackgroundColor3 = SelectedTheme.SecondaryElementBackground
+        ImageElement.UIStroke.Color = SelectedTheme.SecondaryElementStroke
+    end)
 
-			ImageElement.Destroying:Connect(function()
-				if themeConn then themeConn:Disconnect() end
-			end)
+    ImageElement.Destroying:Connect(function()
+        if themeConn then themeConn:Disconnect() end
+    end)
 
-			return ImageValue
-		end
+    return ImageValue
+end
 
 		return Tab
 	end
