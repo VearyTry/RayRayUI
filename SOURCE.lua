@@ -1793,10 +1793,10 @@ function RayfieldLibrary:CreateWindow(Settings)
 				task.wait(math.random(180, 600))
 				if rayfieldDestroyed then break end
 				RayfieldLibrary:Notify({
-					Title = "Rayfield Interface",
-					Content = "Enjoying this UI library? Find it at sirius.menu/discord",
+					Title = "Dolphin Hub",
+					Content = "Enjoying this script? Join our Telegram: https://t.me/vtxdscripts"
 					Duration = 7,
-					Image = 4370033185,
+					Image = 76118229507648,
 				})
 			end
 		end)
