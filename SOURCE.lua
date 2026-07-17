@@ -1747,7 +1747,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 	LoadingFrame.Subtitle.Text = Settings.LoadingSubtitle or "Interface Suite"
 
 	if Settings.LoadingTitle ~= "Rayfield Interface Suite" then
-		LoadingFrame.Version.Text = "Rayfield UI"
+		LoadingFrame.Version.Text = "Loading..."
 	end
 
 	if Settings.Icon and Settings.Icon ~= 0 and Topbar:FindFirstChild('Icon') then
@@ -1790,7 +1790,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 	if not Settings.DisableRayfieldPrompts then
 		task.spawn(function()
 			while not rayfieldDestroyed do
-				task.wait(math.random(10, 10))
+				task.wait(math.random(180, 600))
 				if rayfieldDestroyed then break end
 				RayfieldLibrary:Notify({
 					Title = "Dolphin Hub",
