@@ -1794,7 +1794,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 				if rayfieldDestroyed then break end
 				RayfieldLibrary:Notify({
 					Title = "Dolphin Hub",
-					Content = "Enjoying this script? Join our Telegram: https://t.me/vtxdscripts"
+					Content = "Enjoying this script? Join our Telegram: https://t.me/vtxdscripts",
 					Duration = 7,
 					Image = 76118229507648,
 				})
