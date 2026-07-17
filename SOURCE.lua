@@ -3589,10 +3589,12 @@ function RayfieldLibrary:CreateWindow(Settings)
 			ImageElement.Visible = true
 			ImageElement.Parent = TabPage
 
-			-- Скрываем стандартные текстовые элементы Label
-			ImageElement.Title.Visible = false
+			-- Полностью удаляем стандартные элементы, чтобы библиотека не включала их обратно
+			if ImageElement:FindFirstChild("Title") then
+			    ImageElement.Title:Destroy()
+			end
 			if ImageElement:FindFirstChild("Icon") then
-				ImageElement.Icon.Visible = false
+			    ImageElement.Icon:Destroy()
 			end
 
 			-- Настраиваем высоту контейнера под картинку
